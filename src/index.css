@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Encode+Sans+Expanded:wght@400;600&display=swap');
+
+:root {
+  --main-color: #2563eb;
+  /* Blue */
+  --light-color: #eff6ff;
+  /* Very light blue */
+  --secondary-color: #0ea5e9;
+  /* Sky blue */
+  --shadow: rgba(37, 99, 235, 0.2) 0px 2px 4px -1px,
+    rgba(37, 99, 235, 0.14) 0px 4px 5px 0px,
+    rgba(37, 99, 235, 0.12) 0px 1px 10px 0px;
+  --font-family: 'Encode Sans Expanded', sans-serif;
+  --rating-color: #facc15;
+  /* Gold */
+  --text-dark: #1e293b;
+}
+
+body {
+  font-family: var(--font-family);
+  background-image: url('src\assets\screens/1.jpg');
+  /* ضع الصورة في مجلد public/images */
+  background-size: cover;
+  /* لتغطي كامل الشاشة */
+  background-position: center;
+  /* توضع في وسط الشاشة */
+  background-repeat: no-repeat;
+  /* لا تتكرر */
+  color: var(--text-dark);
+  min-height: 100vh;
+  /* ارتفاع كامل الشاشة */
+}
+
+
+/* Links */
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--secondary-color);
+}
+
+/* Rating stars */
+.rating-color {
+  color: var(--rating-color);
+}
+
+/* Product hover */
+.product:hover {
+  box-shadow: var(--shadow);
+}
+
+.product .btn {
+  transition: transform 0.8s, opacity 0.8s;
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+.product:hover .btn {
+  opacity: 1;
+  transform: translateY(0%);
+}
+
+/* Text sizes */
+.font-sm {
+  font-size: 14px;
+}
+
+/* Theme helpers */
+.text-main {
+  color: var(--main-color);
+}
+
+.text-main-light {
+  color: var(--light-color);
+}
+
+.bg-main {
+  background-color: var(--main-color) !important;
+}
+
+.bg-main-light {
+  background-color: var(--light-color) !important;
+}
+
+/* Headings */
+h1 {
+  font-size: 3.2em;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 2em;
+  line-height: 1.2;
+}
+
+/* Buttons */
+button {
+  @apply px-4 py-2 mx-1 my-2 rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 transition-all duration-300;
+}
+
+/* Active link */
+.active {
+  color: var(--secondary-color);
+}
