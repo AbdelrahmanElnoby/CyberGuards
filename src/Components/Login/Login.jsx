@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; 
-import bgImage from "../../assets/screens/1.jpg"; // عدّل المسار حسب مكان الصورة
+import { useNavigate, Link } from "react-router-dom";
+import bgImage from "../../assets/screens/1.jpg";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -42,8 +42,8 @@ export default function Login() {
       }
 
       setTimeout(() => {
-        navigate("/home");
-      });
+        navigate("/");
+      }, 1500);
     } catch (error) {
       console.error(error);
       if (error.response?.status === 401) {
@@ -61,18 +61,20 @@ export default function Login() {
       className="min-h-screen bg-cover bg-center relative flex items-center justify-center p-6"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black opacity-40"></div>
+      {/* Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-blue-900/40 to-black/70 backdrop-blur-sm"></div>
 
       {/* Card */}
-      <div className="relative z-10 bg-white shadow-xl rounded-2xl p-8 w-full max-w-md border border-gray-100">
-        <h2 className="text-3xl font-bold text-center text-blue-700 mb-6">
+      <div className="relative z-10 bg-white/10 backdrop-blur-xl shadow-2xl rounded-3xl p-8 w-full max-w-md border border-white/20">
+        <h2 className="text-3xl font-extrabold text-center text-white mb-6 tracking-wide">
           Welcome Back
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Email</label>
+            <label className="block text-gray-200 font-medium mb-1">
+              Email
+            </label>
             <input
               type="email"
               name="email"
@@ -80,12 +82,14 @@ export default function Login() {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-2 bg-white/20 text-white placeholder-gray-300 border border-white/30 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none transition"
             />
           </div>
 
           <div>
-            <label className="block text-gray-700 font-medium mb-1">Password</label>
+            <label className="block text-gray-200 font-medium mb-1">
+              Password
+            </label>
             <input
               type="password"
               name="password"
@@ -93,38 +97,42 @@ export default function Login() {
               value={formData.password}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full px-4 py-2 bg-white/20 text-white placeholder-gray-300 border border-white/30 rounded-lg focus:ring-2 focus:ring-blue-400 outline-none transition"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-2 text-lg font-medium rounded-lg text-white transition-all duration-300 ${loading
-                ? "bg-blue-400 cursor-not-allowed"
-                : "bg-blue-600 hover:bg-blue-700"
-              }`}
+            className={`w-full py-2.5 text-lg font-semibold rounded-lg transition-all duration-300 ${
+              loading
+                ? "bg-blue-400/60 text-white cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg"
+            }`}
           >
             {loading ? "Logging in..." : "Login"}
           </button>
 
           {errorMsg && (
-            <p className="text-red-600 text-sm text-center font-medium mt-2">
+            <p className="text-red-400 text-sm text-center font-medium mt-2">
               {errorMsg}
             </p>
           )}
           {successMsg && (
-            <p className="text-green-600 text-sm text-center font-medium mt-2">
+            <p className="text-green-400 text-sm text-center font-medium mt-2">
               {successMsg}
             </p>
           )}
         </form>
 
-        <p className="text-sm text-center mt-6 text-gray-200">
+        <p className="text-sm text-center mt-6 text-gray-300">
           Don’t have an account?{" "}
-          <a href="/register" className="text-blue-400 font-medium hover:underline">
+          <Link
+            to="/register"
+            className="text-blue-400 font-semibold hover:underline"
+          >
             Register
-          </a>
+          </Link>
         </p>
       </div>
     </div>

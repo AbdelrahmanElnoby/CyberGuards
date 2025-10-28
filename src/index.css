@@ -23,17 +23,10 @@
 
 body {
   font-family: var(--font-family);
-  background-image: url('src\assets\screens/1.jpg');
-  /* ضع الصورة في مجلد public/images */
-  background-size: cover;
-  /* لتغطي كامل الشاشة */
-  background-position: center;
-  /* توضع في وسط الشاشة */
-  background-repeat: no-repeat;
-  /* لا تتكرر */
   color: var(--text-dark);
   min-height: 100vh;
-  /* ارتفاع كامل الشاشة */
+  margin: 0; /* مهم جدًا لإزالة الفراغ الأبيض */
+  padding: 0;
 }
 
 
@@ -103,9 +96,7 @@ h2 {
 }
 
 /* Buttons */
-button {
-  @apply px-4 py-2 mx-1 my-2 rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-400 transition-all duration-300;
-}
+
 
 /* Active link */
 .active {

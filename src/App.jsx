@@ -1,37 +1,20 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "./App.css";
+import Layout from "./Components/Layout/Layout.jsx";
+import Login from "./Components/Login/Login.jsx";
+import Register from "./Components/Register/Register.jsx";
 
-import './App.css'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Layout from './Components/Layout/Layout.jsx'
-import Home from './Components/Home/Home.jsx'
-import Cart from './Components/Cart/Cart.jsx'
-import Categories from './Components/Categories/Categories.jsx'
-import Brands from './Components/Brands/Brands.jsx'
-import Products from './Components/Products/Products.jsx'
-import Login from './Components/Login/Login.jsx'
-import Register from './Components/Register/Register.jsx'
-import NotFound from './Components/NotFound/NotFound.jsx'
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* Main layout (home page sections inside Layout) */}
+        <Route path="/" element={<Layout />} />
 
-
-let routers = createBrowserRouter([{
-  path:'' , element : <Layout/>,children:[
-    {index: true , element: <Register/>},
-    {path:'login' , element: <Login/>},
-    {path:'home' , element: <Home/>},
-    {path:'cart' , element: <Cart/>},
-    {path:'brands' , element: <Brands/>},
-    {path:'categories' , element: <Categories/>},
-    {path:'products' , element: <Products/>},
-    {path:'register' , element: <Register/>},
-    {path:'*' , element: <NotFound/>},
-  ]
-}])
-function App() {
-
-  return <>
-
-    <RouterProvider router={routers}></RouterProvider>
-
-  </>
+        {/* Auth pages */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
-
-export default App
