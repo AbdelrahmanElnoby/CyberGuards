@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import SectionWrapper from "../Common/SectionWrapper";
 import { motion } from "framer-motion";
-import { API_ENDPOINTS } from "../../config/api";
+import { API_ENDPOINTS } from "../../config/api.js";
 
 export default function Demo() {
   const [url, setUrl] = useState("");
@@ -290,7 +290,7 @@ export default function Demo() {
 
         {!result && !loading && !error && (
           <div className="text-center text-white/60 mt-8">
-            <p>Enter a URL above to check if it's legitimate or phishing</p>
+            <p>Enter a URL above to check if it&apos;s legitimate or phishing</p>
           </div>
         )}
       </motion.div>
