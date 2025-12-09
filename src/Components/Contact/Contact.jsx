@@ -13,26 +13,36 @@ export default function Contact() {
         Have a question or want to partner with us? Reach out and let’s discuss your cybersecurity needs.
       </motion.p>
 
-      <form className="max-w-xl w-full bg-gray-900/60 p-8 rounded-xl border border-cyan-400/30 shadow-lg space-y-6">
+      <motion.form 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="max-w-xl w-full bg-gray-900/60 backdrop-blur-sm p-8 rounded-xl border border-cyan-400/30 shadow-lg space-y-6"
+      >
         <input
           type="text"
           placeholder="Your Name"
-          className="w-full p-3 rounded-md bg-gray-800 border border-cyan-400/20 focus:outline-none focus:ring-2 focus:ring-cyan-400"
+          className="w-full p-3 rounded-md bg-gray-800/80 border border-cyan-400/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition"
         />
         <input
           type="email"
           placeholder="Your Email"
-          className="w-full p-3 rounded-md bg-gray-800 border border-cyan-400/20 focus:outline-none focus:ring-2 focus:ring-cyan-400"
+          className="w-full p-3 rounded-md bg-gray-800/80 border border-cyan-400/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition"
         />
         <textarea
           placeholder="Your Message"
           rows="5"
-          className="w-full p-3 rounded-md bg-gray-800 border border-cyan-400/20 focus:outline-none focus:ring-2 focus:ring-cyan-400"
+          className="w-full p-3 rounded-md bg-gray-800/80 border border-cyan-400/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition resize-none"
         ></textarea>
-        <button className="w-full bg-cyan-500 text-white py-3 rounded-md hover:bg-cyan-600 transition">
+        <button 
+          type="submit"
+          className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 text-white py-3 rounded-md 
+                     hover:from-cyan-400 hover:to-blue-400 transition-all duration-300 font-semibold
+                     shadow-lg hover:shadow-cyan-500/30"
+        >
           Send Message
         </button>
-      </form>
+      </motion.form>
     </SectionWrapper>
   );
 }

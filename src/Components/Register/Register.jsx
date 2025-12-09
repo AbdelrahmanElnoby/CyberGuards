@@ -45,8 +45,25 @@ export default function Register() {
       setSuccessMsg("✅ Registration successful!");
       console.log("Response:", response.data);
 
+      // Save user info if available
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token);
+      }
+      if (response.data.user) {
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+      } else if (formData.email) {
+        localStorage.setItem("user", JSON.stringify({ 
+          email: formData.email,
+          username: formData.username 
+        }));
+      }
+
+      // Trigger auth change event
+      window.dispatchEvent(new Event("authChange"));
+
       setTimeout(() => {
-        navigate("/");
+        // Reload to update navbar
+        window.location.href = "/";
       }, 1500);
     } catch (error) {
       console.error(error);

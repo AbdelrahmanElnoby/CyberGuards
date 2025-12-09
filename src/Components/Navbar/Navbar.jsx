@@ -1,8 +1,57 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { User, LogOut } from "lucide-react";
 import logo from "../../assets/images/11.png";
 
 export default function Navbar({ activeSection }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const checkAuth = () => {
+      const token = localStorage.getItem("token");
+      const userData = localStorage.getItem("user");
+      const loggedIn = !!token;
+      setIsLoggedIn(loggedIn);
+      if (userData) {
+        try {
+          setUser(JSON.parse(userData));
+        } catch (e) {
+          setUser(null);
+        }
+      } else {
+        setUser(null);
+      }
+    };
+
+    // Check on mount
+    checkAuth();
+
+    // Listen for storage changes (when login/logout happens in other tabs)
+    window.addEventListener("storage", checkAuth);
+
+    // Custom event for same-tab updates
+    window.addEventListener("authChange", checkAuth);
+
+    // Also check when page becomes visible (user switches tabs back)
+    window.addEventListener("focus", checkAuth);
+
+    return () => {
+      window.removeEventListener("storage", checkAuth);
+      window.removeEventListener("authChange", checkAuth);
+      window.removeEventListener("focus", checkAuth);
+    };
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setIsLoggedIn(false);
+    setUser(null);
+    // Trigger auth change event
+    window.dispatchEvent(new Event("authChange"));
+    window.location.href = "/";
+  };
 
   const scrollToSection = (id) => {
     const section = document.getElementById(id);
@@ -85,19 +134,42 @@ export default function Navbar({ activeSection }) {
         </div>
 
         {/* Auth Buttons */}
-        <div className="hidden lg:flex gap-4 text-white font-medium drop-shadow-[0_1px_1px_rgba(0,0,0,0.4)]">
-          <button
-            onClick={() => handleNavigate("/register")}
-            className="px-4 py-2 border border-cyan-400 rounded-full hover:bg-cyan-400 hover:text-black transition"
-          >
-            Register
-          </button>
-          <button
-            onClick={() => handleNavigate("/login")}
-            className="px-4 py-2 border border-white/50 rounded-full hover:bg-white hover:text-black transition"
-          >
-            Login
-          </button>
+        <div className="hidden lg:flex gap-3 items-center text-white font-medium drop-shadow-[0_1px_1px_rgba(0,0,0,0.4)]">
+          {isLoggedIn ? (
+            <>
+              <button
+                onClick={() => handleNavigate("/profile")}
+                className="flex items-center gap-2 px-4 py-2 border border-cyan-400 rounded-full hover:bg-cyan-400 hover:text-black transition"
+                title="Profile"
+              >
+                <User className="w-4 h-4" />
+                <span>Profile</span>
+              </button>
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 px-4 py-2 border border-red-400/50 rounded-full hover:bg-red-500 hover:text-white transition"
+                title="Logout"
+              >
+                <LogOut className="w-4 h-4" />
+                <span>Logout</span>
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => handleNavigate("/register")}
+                className="px-4 py-2 border border-cyan-400 rounded-full hover:bg-cyan-400 hover:text-black transition"
+              >
+                Register
+              </button>
+              <button
+                onClick={() => handleNavigate("/login")}
+                className="px-4 py-2 border border-white/50 rounded-full hover:bg-white hover:text-black transition"
+              >
+                Login
+              </button>
+            </>
+          )}
         </div>
       </nav>
 
@@ -119,18 +191,51 @@ export default function Navbar({ activeSection }) {
           ))}
 
           <div className="flex gap-6 pt-8">
-            <button
-              onClick={() => handleNavigate("/register")}
-              className="px-6 py-2 rounded-full bg-yellow-400 text-black font-semibold hover:bg-yellow-300 transition"
-            >
-              Register
-            </button>
-            <button
-              onClick={() => handleNavigate("/login")}
-              className="px-6 py-2 rounded-full border border-white text-white hover:bg-white hover:text-black transition"
-            >
-              Login
-            </button>
+            {isLoggedIn ? (
+              <>
+                <button
+                  onClick={() => {
+                    handleNavigate("/profile");
+                    setIsOpen(false);
+                  }}
+                  className="flex items-center gap-2 px-6 py-2 rounded-full bg-yellow-400 text-black font-semibold hover:bg-yellow-300 transition"
+                >
+                  <User className="w-5 h-5" />
+                  <span>Profile</span>
+                </button>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setIsOpen(false);
+                  }}
+                  className="flex items-center gap-2 px-6 py-2 rounded-full border border-red-400 text-red-300 hover:bg-red-500 hover:text-white transition"
+                >
+                  <LogOut className="w-5 h-5" />
+                  <span>Logout</span>
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={() => {
+                    handleNavigate("/register");
+                    setIsOpen(false);
+                  }}
+                  className="px-6 py-2 rounded-full bg-yellow-400 text-black font-semibold hover:bg-yellow-300 transition"
+                >
+                  Register
+                </button>
+                <button
+                  onClick={() => {
+                    handleNavigate("/login");
+                    setIsOpen(false);
+                  }}
+                  className="px-6 py-2 rounded-full border border-white text-white hover:bg-white hover:text-black transition"
+                >
+                  Login
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}

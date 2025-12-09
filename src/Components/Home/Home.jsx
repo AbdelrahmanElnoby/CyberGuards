@@ -40,10 +40,26 @@ export default function Home() {
         transition={{ delay: 0.3, duration: 0.8 }}
         className="flex flex-wrap gap-4 mb-20"
       >
-        <button className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg hover:shadow-cyan-500/30 transition-all duration-300">
+        <button 
+          onClick={() => {
+            const demoSection = document.getElementById("demo");
+            if (demoSection) {
+              demoSection.scrollIntoView({ behavior: "smooth" });
+            }
+          }}
+          className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg hover:shadow-cyan-500/30 transition-all duration-300"
+        >
           Try Demo
         </button>
-        <button className="border border-cyan-400 text-cyan-300 px-8 py-3 rounded-full font-semibold hover:bg-cyan-400/10 transition-all duration-300">
+        <button 
+          onClick={() => {
+            const servicesSection = document.getElementById("services");
+            if (servicesSection) {
+              servicesSection.scrollIntoView({ behavior: "smooth" });
+            }
+          }}
+          className="border border-cyan-400 text-cyan-300 px-8 py-3 rounded-full font-semibold hover:bg-cyan-400/10 transition-all duration-300"
+        >
           Learn More
         </button>
       </motion.div>

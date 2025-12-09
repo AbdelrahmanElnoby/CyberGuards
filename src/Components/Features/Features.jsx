@@ -83,6 +83,28 @@ export default function Features() {
           transition={{ repeat: Infinity, duration: 6 }}
           className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[400px] h-[180px] bg-cyan-500/20 blur-[120px] rounded-full -z-10"
         />
+
+        {/* CTA Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.8 }}
+          className="mt-12"
+        >
+          <button
+            onClick={() => {
+              const demoSection = document.getElementById("demo");
+              if (demoSection) {
+                demoSection.scrollIntoView({ behavior: "smooth" });
+              }
+            }}
+            className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500
+                       text-white font-semibold px-10 py-3 rounded-full shadow-[0_0_20px_rgba(6,182,212,0.4)] 
+                       hover:shadow-[0_0_30px_rgba(6,182,212,0.7)] transition-transform hover:scale-105"
+          >
+            Experience Our Demo
+          </button>
+        </motion.div>
       </div>
     </SectionWrapper>
   );

@@ -41,8 +41,20 @@ export default function Login() {
         localStorage.setItem("token", response.data.token);
       }
 
+      // Save user info if available
+      if (response.data.user) {
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+      } else if (response.data.email) {
+        // If user object not provided, save email
+        localStorage.setItem("user", JSON.stringify({ email: response.data.email }));
+      }
+
+      // Trigger auth change event
+      window.dispatchEvent(new Event("authChange"));
+
       setTimeout(() => {
-        navigate("/");
+        // Reload to update navbar
+        window.location.href = "/";
       }, 1500);
     } catch (error) {
       console.error(error);

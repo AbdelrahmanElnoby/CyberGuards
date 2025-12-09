@@ -9,6 +9,7 @@ export default function Demo() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
+  const [savedMessage, setSavedMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,22 +23,60 @@ export default function Demo() {
 
     setLoading(true);
     try {
+      // Validate URL format before sending
+      const trimmedUrl = url.trim();
+      
+      // Basic URL validation
+      if (!trimmedUrl.startsWith('http://') && !trimmedUrl.startsWith('https://')) {
+        setError("Please enter a valid URL starting with http:// or https://");
+        setLoading(false);
+        return;
+      }
+
       // POST request to https://url-detector.skysoft-erb.com/predict
-      // Body: { url: "..." }
+      // Body: { urls: ["..."] } - API expects array of URLs
       const response = await axios.post(
         API_ENDPOINTS.URL_PREDICT, // https://url-detector.skysoft-erb.com/predict
-        { url: url.trim() }, // Send URL in request body
+        { urls: [trimmedUrl] }, // Send URL as array in request body
         {
           headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json',
           },
           timeout: 30000, // 30 seconds timeout
         }
       );
 
-      setResult(response.data);
+      // API returns array of results, get first one since we sent one URL
+      const responseData = response.data;
+      const resultData = Array.isArray(responseData) ? responseData[0] : responseData;
+      
+      if (!resultData) {
+        setError("No result received from the API. Please try again.");
+        setLoading(false);
+        return;
+      }
+
+      setResult(resultData);
+
+      // Save prediction to localStorage
+      const savedPredictions = JSON.parse(localStorage.getItem("predictions") || "[]");
+      const newPrediction = {
+        ...resultData,
+        date: new Date().toISOString(),
+      };
+      savedPredictions.unshift(newPrediction); // Add to beginning
+      // Keep only last 50 predictions
+      const limitedPredictions = savedPredictions.slice(0, 50);
+      localStorage.setItem("predictions", JSON.stringify(limitedPredictions));
+      
+      // Show saved message
+      setSavedMessage("✅ Prediction saved to your profile!");
+      setTimeout(() => setSavedMessage(""), 3000);
     } catch (err) {
       console.error("Error:", err);
+      console.error("Error Response:", err.response?.data);
+      console.error("Request Data:", { url: url.trim() });
       
       // Handle different types of errors
       if (err.code === 'ERR_NETWORK' || err.message === 'Network Error') {
@@ -51,10 +90,76 @@ export default function Demo() {
         );
       } else if (err.response) {
         // Server responded with error status
-        setError(
-          err.response?.data?.message ||
-          `Server Error: ${err.response.status} - ${err.response.statusText}`
-        );
+        const status = err.response.status;
+        const responseData = err.response.data;
+        
+        // Helper function to extract error message from response
+        const getErrorMessage = (data) => {
+          if (!data) return null;
+          
+          // If it's a string, return it
+          if (typeof data === 'string') return data;
+          
+          // If it's an object, try to extract message
+          if (typeof data === 'object') {
+            // Try common error message fields
+            if (data.message) {
+              return typeof data.message === 'string' ? data.message : JSON.stringify(data.message);
+            }
+            if (data.error) {
+              return typeof data.error === 'string' ? data.error : JSON.stringify(data.error);
+            }
+            if (data.detail) {
+              return typeof data.detail === 'string' ? data.detail : JSON.stringify(data.detail);
+            }
+            // If it's an array of errors (common in validation errors)
+            if (Array.isArray(data)) {
+              return data.map(err => {
+                if (typeof err === 'string') return err;
+                if (err?.message) return err.message;
+                if (err?.msg) return err.msg;
+                return JSON.stringify(err);
+              }).join('\n');
+            }
+            // If object has nested errors
+            if (data.errors) {
+              const errors = data.errors;
+              if (Array.isArray(errors)) {
+                return errors.join('\n');
+              }
+              if (typeof errors === 'object') {
+                return Object.entries(errors)
+                  .map(([key, value]) => `${key}: ${Array.isArray(value) ? value.join(', ') : value}`)
+                  .join('\n');
+              }
+            }
+            // Last resort: stringify the object
+            return JSON.stringify(data, null, 2);
+          }
+          
+          return null;
+        };
+        
+        const errorMessage = getErrorMessage(responseData);
+        
+        if (status === 422) {
+          // Unprocessable Entity - validation error
+          setError(
+            `Validation Error (422):\n${errorMessage || "Invalid URL format. Please check your URL and try again."}\n\n` +
+            `Please make sure:\n` +
+            `• The URL is complete (e.g., https://www.example.com)\n` +
+            `• The URL format is correct\n` +
+            `• The URL is accessible`
+          );
+        } else if (status === 400) {
+          setError(
+            `Bad Request (400):\n${errorMessage || "Please check your URL format and try again."}`
+          );
+        } else {
+          setError(
+            errorMessage || `Server Error: ${status} - ${err.response.statusText}`
+          );
+        }
       } else if (err.request) {
         // Request was made but no response received
         setError("No response from server. Please check your connection and try again.");
@@ -116,8 +221,19 @@ export default function Demo() {
             animate={{ opacity: 1, scale: 1 }}
             className="mb-6 p-4 rounded-xl bg-red-500/20 border border-red-500/50 text-red-300"
           >
-            <p className="font-semibold">❌ Error</p>
-            <p>{error}</p>
+            <p className="font-semibold mb-2">❌ Error</p>
+            <p className="whitespace-pre-line text-sm">{error}</p>
+          </motion.div>
+        )}
+
+        {savedMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="mb-6 p-4 rounded-xl bg-green-500/20 border border-green-500/50 text-green-300"
+          >
+            <p className="font-semibold">{savedMessage}</p>
           </motion.div>
         )}
 

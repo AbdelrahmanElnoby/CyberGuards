@@ -103,18 +103,34 @@ export default function Services() {
           ))}
         </motion.div>
 
-        {/* CTA Button */}
-        <motion.button
+        {/* CTA Buttons */}
+        <motion.div
           initial={{ scale: 0 }}
           whileInView={{ scale: 1 }}
           transition={{ duration: 0.6, delay: 0.8 }}
-          className="mt-16 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500
-                     text-white font-semibold px-10 py-3 rounded-full shadow-[0_0_20px_rgba(6,182,212,0.4)] 
-                     hover:shadow-[0_0_30px_rgba(6,182,212,0.7)] transition-transform hover:scale-105"
-          onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
+          className="mt-16 flex flex-wrap gap-4 justify-center"
         >
-          Start Protecting Now
-        </motion.button>
+          <button
+            className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500
+                       text-white font-semibold px-10 py-3 rounded-full shadow-[0_0_20px_rgba(6,182,212,0.4)] 
+                       hover:shadow-[0_0_30px_rgba(6,182,212,0.7)] transition-transform hover:scale-105"
+            onClick={() => {
+              const demoSection = document.getElementById("demo");
+              if (demoSection) {
+                demoSection.scrollIntoView({ behavior: "smooth" });
+              }
+            }}
+          >
+            Try Demo
+          </button>
+          <button
+            className="border-2 border-cyan-400 text-cyan-300 hover:bg-cyan-400/10
+                       font-semibold px-10 py-3 rounded-full transition-all duration-300"
+            onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
+          >
+            Contact Us
+          </button>
+        </motion.div>
       </div>
     </section>
   );

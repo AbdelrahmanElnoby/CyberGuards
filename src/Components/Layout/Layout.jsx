@@ -55,7 +55,7 @@ export default function Layout() {
           <Services />
           <About />
           <Technology />
-          <Features />\
+          <Features />
           <UseCases />
           <Demo />
           <Contact />
