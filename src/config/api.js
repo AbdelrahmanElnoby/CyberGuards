@@ -16,3 +16,4 @@ export const API_PROXY_ENDPOINTS = {
   URL_PREDICT: '/api/predict',
 };
 
+

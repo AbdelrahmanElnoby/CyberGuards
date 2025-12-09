@@ -1,26 +1,20 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useAuth } from "../../context/AuthContext";
 import bgImage from "../../assets/screens/1.jpg";
 import { Trash2, ExternalLink } from "lucide-react";
 
 export default function Profile() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const { isLoggedIn, user, logout } = useAuth();
   const [predictions, setPredictions] = useState([]);
 
   useEffect(() => {
     // Check if user is logged in
-    const token = localStorage.getItem("token");
-    const userData = localStorage.getItem("user");
-
-    if (!token) {
+    if (!isLoggedIn) {
       navigate("/login");
       return;
-    }
-
-    if (userData) {
-      setUser(JSON.parse(userData));
     }
 
     // Load saved predictions
@@ -28,13 +22,10 @@ export default function Profile() {
     if (savedPredictions) {
       setPredictions(JSON.parse(savedPredictions));
     }
-  }, [navigate]);
+  }, [isLoggedIn, navigate]);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    // Trigger auth change event
-    window.dispatchEvent(new Event("authChange"));
+    logout();
     navigate("/");
   };
 
@@ -61,7 +52,7 @@ export default function Profile() {
       : "bg-green-500/20 border-green-500/50";
   };
 
-  if (!user) {
+  if (!isLoggedIn || !user) {
     return null; // Will redirect to login
   }
 

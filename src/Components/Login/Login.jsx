@@ -1,10 +1,12 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import bgImage from "../../assets/screens/1.jpg";
 
 export default function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -37,24 +39,28 @@ export default function Login() {
       setSuccessMsg("✅ Login successful!");
       console.log("Response:", response.data);
 
+      // Get user data
+      let userData = null;
+      if (response.data.user) {
+        userData = response.data.user;
+      } else if (response.data.email) {
+        userData = { email: response.data.email };
+      }
+
+      // Save to localStorage first
       if (response.data.token) {
         localStorage.setItem("token", response.data.token);
       }
-
-      // Save user info if available
-      if (response.data.user) {
-        localStorage.setItem("user", JSON.stringify(response.data.user));
-      } else if (response.data.email) {
-        // If user object not provided, save email
-        localStorage.setItem("user", JSON.stringify({ email: response.data.email }));
+      if (userData) {
+        localStorage.setItem("user", JSON.stringify(userData));
       }
 
-      // Trigger auth change event
-      window.dispatchEvent(new Event("authChange"));
+      // Update context from localStorage
+      const token = localStorage.getItem("token") || response.data.token || "logged_in";
+      login(token, userData);
 
       setTimeout(() => {
-        // Reload to update navbar
-        window.location.href = "/";
+        navigate("/");
       }, 1500);
     } catch (error) {
       console.error(error);
