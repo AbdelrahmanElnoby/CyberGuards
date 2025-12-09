@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useState } from "react";
 import { User, LogOut } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
@@ -12,8 +13,8 @@ export default function Navbar({
   showProfile = true,
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const { isLoggedIn, logout, user } = useAuth();
- 
+  const { isLoggedIn, logout } = useAuth();
+
 
 
   const navigate = useNavigate();
@@ -93,11 +94,10 @@ export default function Navbar({
             <button
               key={link.id}
               onClick={() => scrollToSection(link.id)}
-              className={`transition-all duration-300 ${
-                activeSection === link.id
+              className={`transition-all duration-300 ${activeSection === link.id
                   ? "text-cyan-300 underline underline-offset-8"
                   : "hover:text-cyan-300"
-              }`}
+                }`}
             >
               {link.label}
             </button>
@@ -160,11 +160,10 @@ export default function Navbar({
             <button
               key={link.id}
               onClick={() => scrollToSection(link.id)}
-              className={`transition-colors duration-300 ${
-                activeSection === link.id
+              className={`transition-colors duration-300 ${activeSection === link.id
                   ? "text-yellow-300 scale-110"
                   : "hover:text-yellow-300"
-              }`}
+                }`}
             >
               {link.label}
             </button>
