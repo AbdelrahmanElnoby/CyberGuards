@@ -64,7 +64,7 @@ export default function Services() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.4 }}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 max-w-7xl"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-10 max-w-7xl w-full px-4"
         >
           {services.map((srv, i) => (
             <motion.div
@@ -72,10 +72,10 @@ export default function Services() {
               initial={{ y: 50, opacity: 0 }}
               whileInView={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: i * 0.15 }}
-              whileHover={{ scale: 1.05, rotateY: 3 }}
-              className="relative group bg-gradient-to-br from-slate-900/70 to-slate-800/60 border border-cyan-400/20 
-                         rounded-3xl p-8 backdrop-blur-2xl shadow-[0_0_30px_rgba(6,182,212,0.1)] 
-                         hover:shadow-[0_0_50px_rgba(6,182,212,0.4)] transition-all duration-500 overflow-hidden"
+              whileHover={{ scale: 1.05, y: -5, rotateY: 3 }}
+              className="relative group bg-gradient-to-br from-slate-900/70 to-slate-800/60 border-2 border-cyan-400/20 
+                         rounded-3xl p-6 sm:p-8 backdrop-blur-2xl shadow-[0_0_30px_rgba(6,182,212,0.1)] 
+                         hover:shadow-[0_0_50px_rgba(6,182,212,0.4)] hover:border-cyan-400/40 transition-all duration-500 overflow-hidden"
             >
               {/* Neon border glow */}
               <motion.div

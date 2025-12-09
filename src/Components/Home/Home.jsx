@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Shield, Sparkles, ArrowDown } from "lucide-react";
 import SectionWrapper from "../Common/SectionWrapper";
 
 export default function Home() {
@@ -38,7 +39,7 @@ export default function Home() {
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3, duration: 0.8 }}
-        className="flex flex-wrap gap-4 mb-20"
+        className="flex flex-wrap gap-4 justify-center mb-20 px-4"
       >
         <button 
           onClick={() => {
@@ -47,9 +48,10 @@ export default function Home() {
               demoSection.scrollIntoView({ behavior: "smooth" });
             }
           }}
-          className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg hover:shadow-cyan-500/30 transition-all duration-300"
+          className="group flex items-center gap-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-8 py-4 rounded-full font-semibold hover:shadow-lg hover:shadow-cyan-500/30 transition-all duration-300 hover:scale-105"
         >
-          Try Demo
+          <Sparkles className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+          <span>Try Demo</span>
         </button>
         <button 
           onClick={() => {
@@ -58,9 +60,10 @@ export default function Home() {
               servicesSection.scrollIntoView({ behavior: "smooth" });
             }
           }}
-          className="border border-cyan-400 text-cyan-300 px-8 py-3 rounded-full font-semibold hover:bg-cyan-400/10 transition-all duration-300"
+          className="group flex items-center gap-2 border-2 border-cyan-400 text-cyan-300 px-8 py-4 rounded-full font-semibold hover:bg-cyan-400/10 transition-all duration-300 hover:border-cyan-300"
         >
-          Learn More
+          <Shield className="w-5 h-5" />
+          <span>Learn More</span>
         </button>
       </motion.div>
 
@@ -69,21 +72,21 @@ export default function Home() {
         initial={{ opacity: 0 }}
         animate={{ opacity: [0.4, 1, 0.4] }}
         transition={{ repeat: Infinity, duration: 2 }}
-        className="flex flex-col items-center text-cyan-400/80"
+        className="flex flex-col items-center text-cyan-400/80 cursor-pointer"
+        onClick={() => {
+          const servicesSection = document.getElementById("services");
+          if (servicesSection) {
+            servicesSection.scrollIntoView({ behavior: "smooth" });
+          }
+        }}
       >
-        <span className="text-sm tracking-wide mb-5">Scroll for learn more</span>
-        <motion.svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={2}
-          stroke="currentColor"
-          className="w-6 h-6 text-cyan-400"
-          animate={{ y: [0, 6, 0] }}
-          transition={{ repeat: Infinity, duration: 1.5 }}
+        <span className="text-sm sm:text-base tracking-wide mb-5 font-medium">Scroll for learn more</span>
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
         >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-        </motion.svg>
+          <ArrowDown className="w-6 h-6 sm:w-7 sm:h-7 text-cyan-400" />
+        </motion.div>
       </motion.div>
 
       {/* Subtle background grid */}
