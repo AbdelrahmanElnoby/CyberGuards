@@ -21,7 +21,7 @@ export default function Navbar({
 
   const handleLogout = () => {
     logout();
-    navigate("/");
+    navigate("");
   };
 
   const scrollToSection = (id) => {
@@ -161,8 +161,8 @@ export default function Navbar({
               key={link.id}
               onClick={() => scrollToSection(link.id)}
               className={`transition-colors duration-300 ${activeSection === link.id
-                  ? "text-yellow-300 scale-110"
-                  : "hover:text-yellow-300"
+                  ? "text-cyan-300 scale-110"
+                  : "hover:text-cyan-300"
                 }`}
             >
               {link.label}
@@ -179,7 +179,7 @@ export default function Navbar({
                         handleNavigate("/profile");
                         setIsOpen(false);
                       }}
-                      className="flex items-center gap-2 px-6 py-2 rounded-full bg-yellow-400 text-black font-semibold hover:bg-yellow-300 transition"
+                      className="flex items-center gap-2 px-6 py-2 rounded-full bg-cyan-400 text-black font-semibold hover:bg-cyan-300 transition"
                     >
                       <User className="w-5 h-5" />
                       <span>Profile</span>

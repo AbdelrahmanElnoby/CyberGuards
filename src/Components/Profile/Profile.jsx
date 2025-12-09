@@ -51,6 +51,15 @@ export default function Profile() {
       ? "bg-red-500/20 border-red-500/50"
       : "bg-green-500/20 border-green-500/50";
   };
+  const goToDemo = () => {
+  navigate("/"); // يروح للرئيسية بدون reload
+  setTimeout(() => {
+    const demoSection = document.getElementById("demo");
+    if (demoSection) {
+      demoSection.scrollIntoView({ behavior: "smooth" });
+    }
+  }, 100);
+};
 
   if (!isLoggedIn || !user) {
     return null; // Will redirect to login
@@ -128,20 +137,13 @@ export default function Profile() {
                 <p className="text-gray-500 text-sm">
                   Analyze URLs in the Demo section to save predictions here
                 </p>
-                <button
-                  onClick={() => {
-                    const demoSection = document.getElementById("demo");
-                    if (demoSection) {
-                      window.location.href = "/";
-                      setTimeout(() => {
-                        demoSection.scrollIntoView({ behavior: "smooth" });
-                      }, 100);
-                    }
-                  }}
-                  className="mt-4 px-6 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-full font-semibold transition"
-                >
-                  Go to Demo
-                </button>
+               <button
+  onClick={goToDemo}
+  className="mt-4 px-6 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-full font-semibold transition"
+>
+  Go to Demo
+</button>
+
               </div>
             ) : (
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
