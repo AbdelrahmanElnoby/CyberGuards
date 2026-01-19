@@ -5,6 +5,7 @@ import Layout from "./Components/Layout/Layout.jsx";
 import Login from "./Components/Login/Login.jsx";
 import Register from "./Components/Register/Register.jsx";
 import Profile from "./Components/Profile/Profile.jsx";
+import Chatbot from "./Components/Chatbot/Chatbot.jsx";
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/chatbot" element={<Chatbot />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

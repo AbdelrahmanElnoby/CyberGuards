@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
-import { User, LogOut } from "lucide-react";
+import { useState, useEffect } from "react";
+import { User, LogOut, MessageSquare } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import logo from "../../assets/images/11.png";
 import { useNavigate } from "react-router-dom";
@@ -11,9 +11,19 @@ export default function Navbar({
   showLogin = true,
   showRegister = true,
   showProfile = true,
+  isScrolling = false,
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { isLoggedIn, logout } = useAuth();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
 
 
@@ -48,7 +58,13 @@ export default function Navbar({
   };
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 bg-transparent">
+    <header 
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+        scrolled 
+          ? 'bg-black/80 backdrop-blur-md shadow-lg border-b border-cyan-500/20' 
+          : 'bg-transparent'
+      }`}
+    >
       <nav className="flex items-center justify-between px-6 py-4 lg:px-10 max-w-[1400px] mx-auto">
 
         {/* Logo */}
@@ -107,6 +123,13 @@ export default function Navbar({
         {/* Desktop Auth Buttons */}
         {showAuthButtons && (
           <div className="hidden lg:flex gap-3 items-center text-white font-medium">
+            <button
+              onClick={() => handleNavigate("/chatbot")}
+              className="flex items-center gap-2 px-4 py-2 border border-cyan-400 rounded-full hover:bg-cyan-400 hover:text-black transition"
+            >
+              <MessageSquare className="w-4 h-4" />
+              <span>Chatbot</span>
+            </button>
             {isLoggedIn ? (
               <>
                 {showProfile && (
@@ -170,60 +193,72 @@ export default function Navbar({
           ))}
 
           {showAuthButtons && (
-            <div className="flex gap-6 pt-8">
-              {isLoggedIn ? (
-                <>
-                  {showProfile && (
-                    <button
-                      onClick={() => {
-                        handleNavigate("/profile");
-                        setIsOpen(false);
-                      }}
-                      className="flex items-center gap-2 px-6 py-2 rounded-full bg-cyan-400 text-black font-semibold hover:bg-cyan-300 transition"
-                    >
-                      <User className="w-5 h-5" />
-                      <span>Profile</span>
-                    </button>
-                  )}
+            <div className="flex flex-col gap-4 pt-8">
+              <button
+                onClick={() => {
+                  handleNavigate("/chatbot");
+                  setIsOpen(false);
+                }}
+                className="flex items-center justify-center gap-2 px-6 py-2 rounded-full bg-cyan-400 text-black font-semibold hover:bg-cyan-300 transition"
+              >
+                <MessageSquare className="w-5 h-5" />
+                <span>Chatbot</span>
+              </button>
+              <div className="flex gap-6">
+                {isLoggedIn ? (
+                  <>
+                    {showProfile && (
+                      <button
+                        onClick={() => {
+                          handleNavigate("/profile");
+                          setIsOpen(false);
+                        }}
+                        className="flex items-center gap-2 px-6 py-2 rounded-full bg-cyan-400 text-black font-semibold hover:bg-cyan-300 transition"
+                      >
+                        <User className="w-5 h-5" />
+                        <span>Profile</span>
+                      </button>
+                    )}
 
-                  <button
-                    onClick={() => {
-                      handleLogout();
-                      setIsOpen(false);
-                    }}
-                    className="flex items-center gap-2 px-6 py-2 rounded-full border border-red-400 text-red-300 hover:bg-red-500 hover:text-white transition"
-                  >
-                    <LogOut className="w-5 h-5" />
-                    <span>Logout</span>
-                  </button>
-                </>
-              ) : (
-                <>
-                  {showRegister && (
                     <button
                       onClick={() => {
-                        handleNavigate("/register");
+                        handleLogout();
                         setIsOpen(false);
                       }}
-                      className="px-6 py-2 rounded-full bg-yellow-400 text-black font-semibold hover:bg-yellow-300 transition"
+                      className="flex items-center gap-2 px-6 py-2 rounded-full border border-red-400 text-red-300 hover:bg-red-500 hover:text-white transition"
                     >
-                      Register
+                      <LogOut className="w-5 h-5" />
+                      <span>Logout</span>
                     </button>
-                  )}
+                  </>
+                ) : (
+                  <>
+                    {showRegister && (
+                      <button
+                        onClick={() => {
+                          handleNavigate("/register");
+                          setIsOpen(false);
+                        }}
+                        className="px-6 py-2 rounded-full bg-yellow-400 text-black font-semibold hover:bg-yellow-300 transition"
+                      >
+                        Register
+                      </button>
+                    )}
 
-                  {showLogin && (
-                    <button
-                      onClick={() => {
-                        handleNavigate("/login");
-                        setIsOpen(false);
-                      }}
-                      className="px-6 py-2 rounded-full border border-white text-white hover:bg-white hover:text-black transition"
-                    >
-                      Login
-                    </button>
-                  )}
-                </>
-              )}
+                    {showLogin && (
+                      <button
+                        onClick={() => {
+                          handleNavigate("/login");
+                          setIsOpen(false);
+                        }}
+                        className="px-6 py-2 rounded-full border border-white text-white hover:bg-white hover:text-black transition"
+                      >
+                        Login
+                      </button>
+                    )}
+                  </>
+                )}
+              </div>
             </div>
           )}
         </div>
