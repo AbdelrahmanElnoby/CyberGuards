@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { User, LogOut, MessageSquare } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import logo from "../../assets/images/11.png";
@@ -11,9 +11,19 @@ export default function Navbar({
   showLogin = true,
   showRegister = true,
   showProfile = true,
+  isScrolling = false,
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { isLoggedIn, logout } = useAuth();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
 
 
@@ -48,7 +58,13 @@ export default function Navbar({
   };
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 bg-transparent">
+    <header 
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+        scrolled 
+          ? 'bg-black/80 backdrop-blur-md shadow-lg border-b border-cyan-500/20' 
+          : 'bg-transparent'
+      }`}
+    >
       <nav className="flex items-center justify-between px-6 py-4 lg:px-10 max-w-[1400px] mx-auto">
 
         {/* Logo */}

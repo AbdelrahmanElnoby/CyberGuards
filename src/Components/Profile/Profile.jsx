@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
 import bgImage from "../../assets/screens/1.jpg";
 import { Trash2, ExternalLink } from "lucide-react";
+import ScrollToTop from "../Common/ScrollToTop.jsx";
 
 export default function Profile() {
   const navigate = useNavigate();
@@ -67,7 +68,7 @@ export default function Profile() {
 
   return (
     <div
-      className="min-h-screen bg-cover bg-center relative flex items-center justify-center p-6"
+      className="min-h-screen bg-cover bg-center bg-fixed relative flex items-center justify-center p-4 sm:p-6 overflow-x-hidden"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
       {/* Gradient Overlay */}
@@ -230,6 +231,9 @@ export default function Profile() {
           </div>
         </motion.div>
       </div>
+      
+      {/* Scroll to Top Button */}
+      <ScrollToTop />
     </div>
   );
 }

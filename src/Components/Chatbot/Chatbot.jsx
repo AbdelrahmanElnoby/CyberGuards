@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Send, Bot, User, Loader2, MessageSquare } from "lucide-react";
 import { getChatbotAnswer } from "../../services/chatbotService";
 import bgImage from "../../assets/screens/1.jpg";
+import ScrollToTop from "../Common/ScrollToTop.jsx";
 
 export default function Chatbot() {
   const [messages, setMessages] = useState([
@@ -65,7 +66,7 @@ export default function Chatbot() {
 
   return (
     <div
-      className="min-h-screen bg-cover bg-center relative flex items-center justify-center p-4 sm:p-6"
+      className="min-h-screen bg-cover bg-center bg-fixed relative flex items-center justify-center p-4 sm:p-6 overflow-x-hidden"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
       {/* Gradient Overlay */}
@@ -92,7 +93,7 @@ export default function Chatbot() {
           </div>
 
           {/* Messages Container */}
-          <div className="flex-1 overflow-y-auto p-6 space-y-4 scrollbar-thin scrollbar-thumb-cyan-500/50 scrollbar-track-transparent">
+          <div className="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar">
             {messages.map((message, index) => (
               <motion.div
                 key={index}
@@ -182,6 +183,9 @@ export default function Chatbot() {
           </form>
         </motion.div>
       </div>
+      
+      {/* Scroll to Top Button */}
+      <ScrollToTop />
     </div>
   );
 }
