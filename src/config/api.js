@@ -1,10 +1,10 @@
 export const API_BASE_URLS = {
 
   URL_DETECTOR: "https://url-detector.skysoft-erb.com",
-  AUTH: "http://authtest.duckdns.org",
+  AUTH: "https://authtest.skysoft-erb.com",
 
   URL_DETECTOR: 'https://url-detector.skysoft-erb.com',
-  AUTH: 'http://authtest.duckdns.org',
+  AUTH: 'https://authtest.skysoft-erb.com',
   CHATBOT: 'https://chatbot-api.skysoft-erb.com',
 
 };

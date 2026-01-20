@@ -37,7 +37,7 @@ export default function Register() {
     try {
       // التسجيل
       const registerResponse = await axios.post(
-        "https://authtest.skysoft-erb/api/auth/register",
+        "https://authtest.skysoft-erb.com/api/auth/register",
         {
           username: formData.username,
           email: formData.email,

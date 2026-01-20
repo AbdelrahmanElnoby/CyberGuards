@@ -29,7 +29,7 @@ export default function Login() {
 
     try {
       const response = await axios.post(
-        "https://authtest.duckdns.org/api/auth/login",
+        "https://authtest.skysoft-erb.com/api/auth/login",
         {
           email: formData.email,
           password: formData.password,

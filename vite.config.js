@@ -11,9 +11,9 @@ export default defineConfig({
     proxy: {
       // أي طلب يبدأ بـ /api هيتحول للـ API الحقيقي على HTTP
       '/api': {
-        target: 'http://authtest.duckdns.org',
+        target: 'https://authtest.skysoft-erb.com',
         changeOrigin: true,
-        secure: false, // لأن السيرفر http مش https
+        secure: true,
       },
     },
   },
