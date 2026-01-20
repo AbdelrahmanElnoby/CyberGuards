@@ -37,7 +37,7 @@ export default function Register() {
     try {
       // التسجيل
       const registerResponse = await axios.post(
-        "http://authtest.duckdns.org/api/auth/register",
+        "https://authtest.skysoft-erb/api/auth/register",
         {
           username: formData.username,
           email: formData.email,

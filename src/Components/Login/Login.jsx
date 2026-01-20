@@ -29,7 +29,7 @@ export default function Login() {
 
     try {
       const response = await axios.post(
-        "http://authtest.duckdns.org/api/auth/login",
+        "https://authtest.duckdns.org/api/auth/login",
         {
           email: formData.email,
           password: formData.password,

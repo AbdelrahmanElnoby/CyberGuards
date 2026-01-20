@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
 import bgImage from "../../assets/screens/1.jpg";
-<<<<<<< HEAD
+
 import { Trash2, ExternalLink, Copy } from "lucide-react";
 import {
   BarChart,
@@ -13,10 +13,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-=======
-import { Trash2, ExternalLink } from "lucide-react";
-import ScrollToTop from "../Common/ScrollToTop.jsx";
->>>>>>> 3c90bd1d174c27bb7522fe15e0693b8cd511a4ff
+
 
 export default function ProfileDashboard() {
   const navigate = useNavigate();
@@ -120,11 +117,9 @@ const filteredPredictions = predictions
 
   return (
     <div
-<<<<<<< HEAD
+
       className="min-h-screen bg-cover bg-center relative flex flex-col items-center p-6"
-=======
-      className="min-h-screen bg-cover bg-center bg-fixed relative flex items-center justify-center p-4 sm:p-6 overflow-x-hidden"
->>>>>>> 3c90bd1d174c27bb7522fe15e0693b8cd511a4ff
+
       style={{ backgroundImage: `url(${bgImage})` }}
     >
       <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-blue-900/50 to-black/80 backdrop-blur-sm"></div>
@@ -326,7 +321,7 @@ const filteredPredictions = predictions
       </div>
       
       {/* Scroll to Top Button */}
-      <ScrollToTop />
+  
     </div>
   );
 }
