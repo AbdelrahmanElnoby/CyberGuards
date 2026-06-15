@@ -38,6 +38,8 @@ export default function Demo() {
   const [url, setUrl] = useState("");
   const [networkFile, setNetworkFile] = useState(null);
   const [spamFile, setSpamFile] = useState(null);
+  const [password, setPassword] = useState("");
+const [passwordResult, setPasswordResult] = useState(null);
 
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
@@ -46,12 +48,14 @@ export default function Demo() {
   const [downloadUrl, setDownloadUrl] = useState("");
   const [fileName, setFileName] = useState("");
 
-  const switchMode = (next) => {
-    setMode(next);
-    setError("");
-    setResult(null);
-    setDownloadUrl("");
-  };
+const switchMode = (next) => {
+  setMode(next);
+  setError("");
+  setResult(null);
+  setPasswordResult(null);
+  setPassword("");
+  setDownloadUrl("");
+};
 
   /* ================= URL MODEL ================= */
   const handleUrlSubmit = async (e) => {
@@ -84,12 +88,47 @@ export default function Demo() {
       const data = Array.isArray(res.data) ? res.data[0] : res.data;
       setResult(data);
       savePrediction({ url: trimmedUrl, prediction: data.prediction });
-    } catch (err) {
+    } catch  {
       setError("Failed to analyze URL");
     } finally {
       setLoading(false);
     }
   };
+  /* ================= PASSWORD CHECKER ================= */
+const handlePasswordSubmit = async (e) => {
+  e.preventDefault();
+
+  setError("");
+  setPasswordResult(null);
+
+  if (!password.trim()) {
+    setError("Please enter a password");
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+    const res = await axios.post(
+      API_ENDPOINTS.PASSWORD_CHECK,
+      {
+        password,
+      }
+    );
+
+    setPasswordResult(res.data);
+
+    savePrediction({
+      url: "Password Checker",
+      prediction: res.data.strength_label,
+    });
+  } catch (err) {
+    console.error(err);
+    setError("Failed to analyze password");
+  } finally {
+    setLoading(false);
+  }
+};
 
   /* ================= CSV MODEL ================= */
   const handleCsvSubmit = async (e) => {
@@ -240,8 +279,8 @@ export default function Demo() {
   return (
     <SectionWrapper id="demo" title="Try Our Demo">
       <p className="max-w-3xl mb-8 opacity-90">
-        Test our AI models: URL phishing detection, network traffic analysis, or email spam detection.
-      </p>
+  Test our AI models: URL phishing detection, network traffic analysis, email spam detection, and password strength analysis.
+</p>
 
       {/* ===== MODE SWITCH ===== */}
       <div className="flex flex-wrap gap-4 mb-8">
@@ -274,6 +313,17 @@ export default function Demo() {
         >
           Spam Detector (CSV)
         </button>
+        <button
+  type="button"
+  onClick={() => switchMode("password")}
+  className={`px-6 py-3 rounded-full font-semibold transition ${
+    mode === "password"
+      ? "bg-cyan-500 text-white"
+      : "bg-white/10 text-white/70"
+  }`}
+>
+  Password Checker
+</button>
       </div>
 
       {/* ===== URL MODEL UI ===== */}
@@ -455,7 +505,117 @@ export default function Demo() {
             </div>
           )}
         </form>
-      )}
+      )}{mode === "password" && (
+  <form
+    onSubmit={handlePasswordSubmit}
+    className="space-y-4 max-w-2xl"
+  >
+    <input
+      type="password"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+      placeholder="Enter Password"
+      className="w-full px-6 py-4 rounded-xl bg-white/10 border border-white/20 text-white"
+    />
+
+    <button
+      disabled={loading}
+      className="bg-cyan-500 text-white px-8 py-4 rounded-xl"
+    >
+      {loading ? "Checking..." : "Check Password"}
+    </button>
+
+    {passwordResult && (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="mt-6 p-6 rounded-2xl border border-white/20 bg-white/5"
+      >
+        <h3 className="text-xl font-bold mb-4 text-cyan-400">
+          Password Analysis
+        </h3>
+
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <div>
+            <span className="text-white/60">Strength:</span>
+           <p
+  className={`font-bold text-lg ${
+    passwordResult.strength_label?.toLowerCase() === "weak"
+      ? "text-red-400"
+      : passwordResult.strength_label?.toLowerCase() === "medium"
+      ? "text-yellow-400"
+      : "text-green-400"
+  }`}
+>
+  {passwordResult.strength_label}
+</p>
+          </div>
+
+          <div>
+            <span className="text-white/60">Crack Time:</span>
+            <p>{passwordResult.crack_time}</p>
+          </div>
+
+          <div>
+            <span className="text-white/60">Length:</span>
+            <p>{passwordResult.length}</p>
+          </div>
+
+          <div>
+            <span className="text-white/60">Character Pool:</span>
+            <p>{passwordResult.character_pool_size}</p>
+          </div>
+        </div>
+
+        <div className="mb-4">
+          <h4 className="font-semibold mb-2">
+            Security Checks
+          </h4>
+
+          <ul className="space-y-1">
+            <li>
+              Uppercase:
+              {" "}
+              {passwordResult.has_uppercase ? "✅" : "❌"}
+            </li>
+
+            <li>
+              Lowercase:
+              {" "}
+              {passwordResult.has_lowercase ? "✅" : "❌"}
+            </li>
+
+            <li>
+              Numbers:
+              {" "}
+              {passwordResult.has_digits ? "✅" : "❌"}
+            </li>
+
+            <li>
+              Special Characters:
+              {" "}
+              {passwordResult.has_special ? "✅" : "❌"}
+            </li>
+          </ul>
+        </div>
+
+        {passwordResult.tips?.length > 0 && (
+          <div>
+            <h4 className="font-semibold mb-2 text-yellow-400">
+              Tips
+            </h4>
+
+            <ul className="list-disc pl-5 space-y-1 text-white/80">
+              {passwordResult.tips.map((tip, index) => (
+                <li key={index}>{tip}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </motion.div>
+    )}
+  </form>
+)}
 
       {error && (
         <div className="mt-6 p-4 rounded-xl bg-red-500/20 border border-red-500/50 text-red-300">
